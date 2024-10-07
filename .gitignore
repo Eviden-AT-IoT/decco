@@ -78,3 +78,5 @@ package-links.json
 
 _opam
 *.exe
+
+.history
