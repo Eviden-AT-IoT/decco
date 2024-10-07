@@ -39,39 +39,39 @@ jobs:
         working-directory: ppx_src
 
       - name: Upload Build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}
           path: ppx_src/_build/default/bin/bin.exe
           retention-days: 1
 
-  npm-release:
-    name: NPM Release
-    runs-on: ubuntu-latest
-    needs:
-      - build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.ref }}
+  # npm-release:
+  #   name: NPM Release
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - build
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: ${{ github.ref }}
 
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
+  #     - name: Download Artifacts
+  #       uses: actions/download-artifact@v2
 
-      - name: Move / Rename Artifacts
-        run: |
-          mv ubuntu-latest/bin.exe ./ppx-linux.exe
-          mv macos-latest/bin.exe ./ppx-osx.exe
-          mv windows-latest/bin.exe ./ppx-windows.exe
+  #     - name: Move / Rename Artifacts
+  #       run: |
+  #         mv ubuntu-latest/bin.exe ./ppx-linux.exe
+  #         mv macos-latest/bin.exe ./ppx-osx.exe
+  #         mv windows-latest/bin.exe ./ppx-windows.exe
 
-      - uses: actions/setup-node@v1
-        with:
-          always-auth: true
-          registry-url: "https://registry.npmjs.org"
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         always-auth: true
+  #         registry-url: "https://registry.npmjs.org"
 
-      - env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          yarn publish --access=public
+  #     - env:
+  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  #       run: |
+  #         echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+  #         yarn publish --access=public
